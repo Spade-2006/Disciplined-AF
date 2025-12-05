@@ -1,0 +1,10 @@
+"WORKOUTS"
+"date","workout_id","name","notes","duration_minutes"
+"""2025-12-04T18:30:00.000Z""","1","Test Workout","Quick test","45"
+
+"NUTRITION"
+"date","log_id","calories","protein","carbs","fats","micros"
+
+"PROGRESS"
+"date","progress_id","weight","bodyfat","measurements","photo_url","notes"
+
