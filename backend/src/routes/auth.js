@@ -4,6 +4,7 @@ const router = express.Router();
 const db = require('../db');
 const { hash, compare } = require('../utils/hash');
 const jwt = require('jsonwebtoken');
+const auth = require('../middleware/auth');
 
 const signToken = (user) =>
   jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
@@ -172,3 +173,5 @@ router.put('/profile', auth, async (req, res) => {
 module.exports = function authRouter(req, res, next) {
   router.handle(req, res, next);
 };
+
+

@@ -76,3 +76,6 @@ router.get("/download", auth, async (req, res) => {
 module.exports = function exportRouter(req, res, next) {
   router.handle(req, res, next);
 };
+
+
+module.exports = router;

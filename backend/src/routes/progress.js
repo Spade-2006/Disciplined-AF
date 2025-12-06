@@ -185,3 +185,5 @@ router.get('/summary', auth, async (req, res) => {
 module.exports = function progressRouter(req, res, next) {
   router.handle(req, res, next);
 };
+
+module.exports = router;

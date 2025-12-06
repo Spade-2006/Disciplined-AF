@@ -1,13 +1,16 @@
+// src/index.js
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const db = require('./db');
 
 const app = express();
+
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Load route modules
+// Import route modules
 const authRoutes = require('./routes/auth');
 const workoutRoutes = require('./routes/workouts');
 const nutritionRoutes = require('./routes/nutrition');
@@ -15,39 +18,34 @@ const progressRoutes = require('./routes/progress');
 const exportRoutes = require('./routes/export');
 const trackingRoutes = require('./routes/tracking');
 
-// Helper to normalize router exports (for Express 5 compatibility)
-const asRouter = (mod) => (typeof mod === 'function' ? mod : mod && mod.default ? mod.default : mod);
-
 // Mount routes
-app.use('/api/auth', asRouter(authRoutes));
-app.use('/api/workouts', asRouter(workoutRoutes));
-app.use('/api/nutrition', asRouter(nutritionRoutes));
-app.use('/api/progress', asRouter(progressRoutes));
-app.use('/api/export', asRouter(exportRoutes));
-app.use('/api/tracking', asRouter(trackingRoutes));
+app.use('/api/auth', authRoutes);
+app.use('/api/workouts', workoutRoutes);
+app.use('/api/nutrition', nutritionRoutes);
+app.use('/api/progress', progressRoutes);
+app.use('/api/export', exportRoutes);
+app.use('/api/tracking', trackingRoutes);
 
-
-// Health check
+// Health check route
 app.get('/api/health', async (req, res) => {
   try {
-    // Test database connection
     await db.query('SELECT 1');
-    res.json({ 
+    res.json({
       status: 'ok',
       timestamp: new Date().toISOString(),
-      database: 'connected'
+      database: 'connected',
     });
   } catch (err) {
-    res.status(503).json({ 
+    res.status(503).json({
       status: 'error',
       timestamp: new Date().toISOString(),
       database: 'disconnected',
-      error: err.message 
+      error: err.message,
     });
   }
 });
 
-// DB test
+// Database test route
 app.get('/api/testdb', async (req, res) => {
   try {
     const result = await db.query('SELECT NOW()');
@@ -57,6 +55,7 @@ app.get('/api/testdb', async (req, res) => {
   }
 });
 
+// Start server
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`🚀 Disciplined AF API server running on port ${PORT}`);

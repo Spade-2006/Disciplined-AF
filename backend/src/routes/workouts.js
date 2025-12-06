@@ -75,3 +75,6 @@ router.get('/all', auth, async (req, res) => {
 module.exports = function workoutsRouter(req, res, next) {
   router.handle(req, res, next);
 };
+
+
+module.exports = router;

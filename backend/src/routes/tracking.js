@@ -143,3 +143,4 @@ module.exports = function trackingRouter(req, res, next) {
   router.handle(req, res, next);
 };
 
+module.exports = router;
