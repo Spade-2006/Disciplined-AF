@@ -1,5 +1,6 @@
 // src/routes/auth.js
 const express = require('express');
+//abc
 const router = express.Router();
 const db = require('../db');
 const { hash, compare } = require('../utils/hash');
