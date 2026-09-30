@@ -1,6 +1,7 @@
 import { memo, useLayoutEffect, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Object3D } from 'three'
+import { LAB_CYAN, LAB_CYAN_BRIGHT, LAB_RED, LAB_RED_DEEP } from './labPalette.js'
 
 const platformLedCount = 32
 
@@ -32,7 +33,7 @@ function RingMarkers({ count, radius, y, size, color, metallic = false }) {
   )
 }
 
-function Platform({ reducedMotion }) {
+function Platform({ reducedMotion, probeLevel = 0 }) {
   const edgeRef = useRef(null)
   const coreRef = useRef(null)
   const rotorRef = useRef(null)
@@ -40,11 +41,12 @@ function Platform({ reducedMotion }) {
 
   useFrame(({ clock }) => {
     if (reducedMotion) return
-    const pulse = 0.16 + (Math.sin(clock.elapsedTime * 0.82) + 1) * 0.07
-    if (edgeRef.current) edgeRef.current.material.opacity = pulse
-    if (coreRef.current) coreRef.current.material.emissiveIntensity = 0.07 + pulse * 0.14
-    if (rotorRef.current) rotorRef.current.rotation.y = clock.elapsedTime * 0.035
-    if (indexRingRef.current) indexRingRef.current.rotation.y = -clock.elapsedTime * 0.018
+    const probe = probeLevel
+    const pulse = 0.16 + (Math.sin(clock.elapsedTime * (0.82 + probe * 0.28)) + 1) * (0.07 + probe * 0.03)
+    if (edgeRef.current) edgeRef.current.material.opacity = pulse + probe * 0.1
+    if (coreRef.current) coreRef.current.material.emissiveIntensity = 0.07 + pulse * 0.14 + probe * 0.06
+    if (rotorRef.current) rotorRef.current.rotation.y = clock.elapsedTime * (0.035 + probe * 0.028)
+    if (indexRingRef.current) indexRingRef.current.rotation.y = -clock.elapsedTime * (0.018 + probe * 0.012)
   })
 
   return (
@@ -63,15 +65,15 @@ function Platform({ reducedMotion }) {
       </mesh>
       <mesh ref={coreRef} position={[0, 0.105, 0]}>
         <cylinderGeometry args={[1.5, 1.55, 0.025, 96]} />
-        <meshStandardMaterial color="#141a1b" emissive="#a3222c" emissiveIntensity={0.1} metalness={0.58} roughness={0.38} />
+        <meshStandardMaterial color="#141a1b" emissive={LAB_RED_DEEP} emissiveIntensity={0.1} metalness={0.58} roughness={0.38} />
       </mesh>
       <mesh ref={edgeRef} position={[0, 0.118, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <torusGeometry args={[1.72, 0.022, 8, 96]} />
-        <meshBasicMaterial color="#d8414b" toneMapped={false} transparent opacity={0.28} />
+        <meshBasicMaterial color={LAB_RED} toneMapped={false} transparent opacity={0.28} />
       </mesh>
       <mesh position={[0, 0.14, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <torusGeometry args={[1.88, 0.012, 6, 96]} />
-        <meshBasicMaterial color="#d7e7e5" transparent opacity={0.48} />
+        <meshBasicMaterial color={LAB_CYAN_BRIGHT} transparent opacity={0.42} />
       </mesh>
       <mesh position={[0, 0.018, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <torusGeometry args={[1.985, 0.018, 8, 96]} />
@@ -80,15 +82,15 @@ function Platform({ reducedMotion }) {
       <group ref={rotorRef} position={[0, 0.15, 0]}>
         <mesh rotation={[-Math.PI / 2, 0, 0]}>
           <torusGeometry args={[1.58, 0.009, 6, 96]} />
-          <meshBasicMaterial color="#b9dfe0" transparent opacity={0.62} />
+          <meshBasicMaterial color={LAB_CYAN} transparent opacity={0.58} />
         </mesh>
-        <RingMarkers count={platformLedCount} radius={1.86} y={-0.01} size={[0.055, 0.018, 0.014]} color="#b9dfe0" />
+        <RingMarkers count={platformLedCount} radius={1.86} y={-0.01} size={[0.055, 0.018, 0.014]} color={LAB_CYAN_BRIGHT} />
         <RingMarkers count={24} radius={1.66} y={0} size={[0.15, 0.026, 0.055]} color="#626e70" metallic />
       </group>
       <group ref={indexRingRef} position={[0, 0.15, 0]}>
-        <RingMarkers count={8} radius={1.43} y={0} size={[0.11, 0.018, 0.035]} color="#a93640" />
+        <RingMarkers count={8} radius={1.43} y={0} size={[0.11, 0.018, 0.035]} color={LAB_RED} />
       </group>
-      <pointLight position={[0, 0.42, 0]} intensity={0.38} color="#cdebee" distance={2.6} />
+      <pointLight position={[0, 0.32, 0]} intensity={0.55} color={LAB_CYAN_BRIGHT} distance={3.5} />
     </group>
   )
 }

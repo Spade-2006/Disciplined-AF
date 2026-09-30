@@ -1,6 +1,7 @@
-import { memo, useRef } from 'react'
+import { memo } from 'react'
 import { Grid } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
+import { LAB_CYAN, LAB_RED } from './labPalette.js'
+import FacilityMachinery from './FacilityMachinery.jsx'
 
 const gantrySides = [-1, 1]
 const wallRibs = [-10, -7, -4, -1, 2, 5, 8, 10]
@@ -17,20 +18,12 @@ function RedFixture({ position, size = [0.035, 1.8, 0.04] }) {
   return (
     <mesh position={position}>
       <boxGeometry args={size} />
-      <meshBasicMaterial color="#d8414b" toneMapped={false} />
+      <meshBasicMaterial color={LAB_RED} toneMapped={false} />
     </mesh>
   )
 }
 
-function Environment() {
-  const cyanLightRef = useRef(null)
-
-  useFrame(({ clock }) => {
-    if (cyanLightRef.current) {
-      cyanLightRef.current.intensity = 3.2 + Math.sin(clock.elapsedTime * 0.32) * 0.18
-    }
-  })
-
+function Environment({ reducedMotion }) {
   return (
     <group name="physique-facility">
       <mesh position={[0, -3.06, -0.4]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
@@ -91,6 +84,7 @@ function Environment() {
         <meshStandardMaterial color="#303739" metalness={0.86} roughness={0.27} />
       </mesh>
       <RedFixture position={[0, 3.65, -0.84]} size={[5.7, 0.035, 0.045]} />
+      <FacilityMachinery reducedMotion={reducedMotion} />
 
       <mesh position={[0, -2.96, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[30, 30]} />
@@ -101,19 +95,19 @@ function Environment() {
         args={[24, 24]}
         cellSize={0.5}
         cellThickness={0.35}
-        cellColor="#556164"
+        cellColor="#4d5c5e"
         sectionSize={2}
         sectionThickness={0.75}
-        sectionColor="#a63840"
+        sectionColor={LAB_RED}
         fadeDistance={17}
         fadeStrength={1.4}
         infiniteGrid
       />
 
-      <spotLight position={[0, 6.5, 2.3]} angle={0.42} penumbra={0.9} intensity={16} color="#f4fbf8" castShadow />
-      <pointLight position={[-3.4, 1.2, -1.2]} intensity={3.2} color="#d93440" distance={8} />
-      <pointLight ref={cyanLightRef} position={[3.5, 1.3, -1.4]} intensity={3.2} color="#a6dade" distance={7} />
-      <pointLight position={[0, 3.2, -3.1]} intensity={1.6} color="#edf9f7" distance={7} />
+      <spotLight position={[0, 6.5, 2.3]} angle={0.42} penumbra={0.9} intensity={12} color="#f4f6f4" castShadow />
+      <pointLight position={[-3.4, 1.2, -1.2]} intensity={3.2} color={LAB_RED} distance={8} />
+      <pointLight position={[3.5, 1.3, -1.4]} intensity={2.4} color={LAB_CYAN} distance={7} />
+      <pointLight position={[0, 3.2, -3.1]} intensity={1.5} color="#edf1f0" distance={7} />
     </group>
   )
 }

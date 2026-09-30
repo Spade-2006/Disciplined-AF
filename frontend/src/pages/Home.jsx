@@ -30,24 +30,28 @@ function Home() {
 	const [selectedRegion, setSelectedRegion] = useState(null)
 	const [previewPlaying, setPreviewPlaying] = useState(false)
 	const [faqOpen, setFaqOpen] = useState(false)
+	const [menuOpen, setMenuOpen] = useState(false)
 	const handleRegionSelect = useCallback((regionId) => {
 		setSelectedRegion((current) => current === regionId ? null : regionId)
 	}, [])
 
 	return (
 		<div className="landing-experience">
-			<header className="landing-header">
+			<header className={`landing-header${menuOpen ? ' is-menu-open' : ''}`}>
 				<a className="landing-brand" href="#top" aria-label="Disciplined AF home">
 					<span className="brand-emblem" aria-hidden="true"><i /><i /><i /></span>
 					<span>DISCIPLINED <b>AF</b><small>PHYSIQUE INTELLIGENCE</small></span>
 				</a>
-				<nav className="landing-nav" aria-label="Main navigation">
+				<button className="nav-menu-toggle" type="button" aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'} aria-expanded={menuOpen} aria-controls="landing-navigation" onClick={() => setMenuOpen((open) => !open)}>
+					<span /><span />
+				</button>
+				<nav className={`landing-nav${menuOpen ? ' is-open' : ''}`} id="landing-navigation" aria-label="Main navigation" onClick={() => setMenuOpen(false)}>
 					<a href="#about">ABOUT</a>
 					<a href="#features">FEATURES</a>
 					<button type="button" aria-pressed={previewPlaying} onClick={() => setPreviewPlaying((playing) => !playing)}>PREVIEW</button>
-					<button type="button" aria-expanded={faqOpen} onClick={() => setFaqOpen((open) => !open)}>FAQ</button>
+					<button type="button" aria-expanded={faqOpen} aria-controls="faq" onClick={() => setFaqOpen((open) => !open)}>FAQ</button>
 				</nav>
-				<a className="header-enter" href="#physique-model">ENTER THE SYSTEM <span aria-hidden="true">↗</span></a>
+				<a className="header-enter" href="#physique-model">ENTER THE SYSTEM <span aria-hidden="true">→</span></a>
 				{faqOpen && (
 					<div className="faq-popover" id="faq">
 						<button type="button" onClick={() => setFaqOpen(false)} aria-label="Close FAQ">×</button>
@@ -70,7 +74,12 @@ function Home() {
 					onRegionSelect={handleRegionSelect}
 					previewPlaying={previewPlaying}
 				/>
-				<FeatureStack selectedRegion={selectedRegion} onClearSelection={() => setSelectedRegion(null)} />
+				<FeatureStack
+					selectedRegion={selectedRegion}
+					hoveredRegion={hoveredRegion}
+					previewPlaying={previewPlaying}
+					onClearSelection={() => setSelectedRegion(null)}
+				/>
 			</main>
 
 			<footer className="capability-strip" id="capabilities">

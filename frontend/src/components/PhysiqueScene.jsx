@@ -1,11 +1,12 @@
 import { Suspense, memo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { OrbitControls, Sparkles } from '@react-three/drei'
+import { Environment as SceneReflections, Lightformer, OrbitControls, Sparkles } from '@react-three/drei'
 import { Quaternion, Vector3 } from 'three'
-import GLBPhysique, { MuscleTarget } from './GLBPhysique.jsx'
+import GLBPhysique from './GLBPhysique.jsx'
 import Environment from './Environment.jsx'
 import Platform from './Platform.jsx'
 import Scanner from './Scanner.jsx'
+import { LAB_CYAN, LAB_CYAN_BRIGHT, LAB_CYAN_LIGHT, LAB_RED, LAB_VOID } from './labPalette.js'
 
 const sparkleScale = [8, 7, 5]
 const MemoSparkles = memo(Sparkles)
@@ -56,7 +57,7 @@ function MouseInfluence({
     }
   })
 
-  return <pointLight ref={lightRef} position={[0, 1, 4]} intensity={0.65} color="#c7edf0" distance={9} />
+  return <pointLight ref={lightRef} position={[0, 1, 4]} intensity={0.58} color={LAB_CYAN} distance={9} />
 }
 
 function IdleMotion({ children, reducedMotion, isInteracting }) {
@@ -132,16 +133,23 @@ function PhysiqueScene({
   reducedMotion,
   selectedRegion,
   previewPlaying,
+  calloutLayoutRef,
 }) {
   return (
     <>
-      <color attach="background" args={['#111719']} />
-      <fog attach="fog" args={['#111719', 12, 28]} />
-      <hemisphereLight args={['#e8f2f2', '#252b2d', 0.48]} />
-      <directionalLight position={[-4, 6, 5]} intensity={3.6} color="#fff0df" />
-      <directionalLight position={[4, 1.8, 4]} intensity={1.25} color="#bde9ee" />
-      <directionalLight position={[0, 4, -4]} intensity={2.4} color="#d8eff0" />
-      <pointLight position={[0, -2.35, 0.5]} intensity={0.65} color="#c9e8e9" distance={3.2} />
+      <color attach="background" args={[LAB_VOID]} />
+      <fog attach="fog" args={[LAB_VOID, 13, 36]} />
+      <hemisphereLight args={['#dce6e6', '#15191a', 0.3]} />
+      <directionalLight position={[-4, 6, 5]} intensity={3.35} color="#f3f1ec" />
+      <directionalLight position={[4, 1.8, 4]} intensity={1.05} color={LAB_CYAN_BRIGHT} />
+      <directionalLight position={[0, 4, -4]} intensity={2.7} color={LAB_CYAN_LIGHT} />
+      <directionalLight position={[-4, 1, -3]} intensity={1.05} color={LAB_RED} />
+      <pointLight position={[0, -2.35, 0.5]} intensity={0.58} color={LAB_CYAN} distance={3.2} />
+      <SceneReflections resolution={128} frames={1} background={false} environmentIntensity={0.48}>
+        <Lightformer form="rect" intensity={1.15} color="#f2f0ea" position={[-4, 3, 4]} rotation={[0, 0.55, 0]} scale={[3.5, 6, 1]} />
+        <Lightformer form="rect" intensity={0.72} color={LAB_CYAN} position={[4, 1, 3]} rotation={[0, -0.55, 0]} scale={[2, 5, 1]} />
+        <Lightformer form="rect" intensity={0.38} color={LAB_RED} position={[-4, 0, -2]} rotation={[0, Math.PI / 2, 0]} scale={[1.2, 4.5, 1]} />
+      </SceneReflections>
       <MouseInfluence
         controlsRef={controlsRef}
         cameraTarget={cameraTarget}
@@ -156,17 +164,17 @@ function PhysiqueScene({
         onComplete={onInteractionSettled}
       />
 
-      <Environment />
-      <Scanner reducedMotion={reducedMotion} />
-      <Platform reducedMotion={reducedMotion} />
+      <Environment reducedMotion={reducedMotion} />
+      <Scanner reducedMotion={reducedMotion} probeLevel={selectedRegion ? 2 : hoveredRegion ? 1 : 0} />
+      <Platform reducedMotion={reducedMotion} probeLevel={selectedRegion ? 2 : hoveredRegion ? 1 : 0} />
       <MemoSparkles
         count={40}
-        color="#dce9e8"
-        opacity={0.16}
-        size={0.55}
+        color={LAB_CYAN_LIGHT}
+        opacity={0.12}
+        size={0.42}
         scale={sparkleScale}
-        speed={reducedMotion ? 0.01 : 0.07}
-        noise={0.6}
+        speed={reducedMotion ? 0 : 0.035}
+        noise={0.4}
       />
 
       <IdleMotion reducedMotion={reducedMotion} isInteracting={isInteracting}>
@@ -182,10 +190,11 @@ function PhysiqueScene({
             selectedRegion={selectedRegion}
             onHover={onRegionHover}
             onSelect={onRegionSelect}
+            calloutLayoutRef={calloutLayoutRef}
+            reducedMotion={reducedMotion}
           />
         </Suspense>
       </IdleMotion>
-      <MuscleTarget regionId={selectedRegion ?? hoveredRegion} />
 
       <OrbitControls
         ref={controlsRef}

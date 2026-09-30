@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import PhysiqueScene from './PhysiqueScene.jsx'
 import HUD from './HUD.jsx'
 import MuscleCallouts from './MuscleCallouts.jsx'
+import { createCalloutLayout } from './muscleCalloutCatalog.js'
 
 const cameraTargetY = -0.165
 const cameraTarget = [0, cameraTargetY, 0]
@@ -27,6 +28,7 @@ function PhysiqueViewport({
   const interactionRef = useRef(false)
   const releasePendingRef = useRef(false)
   const viewTransitionRef = useRef(null)
+  const calloutLayoutRef = useRef(createCalloutLayout())
   const [viewMode, setViewMode] = useState('front')
   const [heatmapMode, setHeatmapMode] = useState(false)
   const [showMeasurements, setShowMeasurements] = useState(true)
@@ -72,7 +74,7 @@ function PhysiqueViewport({
   }
 
   return (
-    <section className="body-stage" id="physique-model" aria-label="Interactive 3D physique model">
+    <section className={`body-stage${hoveredRegion ? ' is-probing' : ''}${selectedRegion ? ' is-locked' : ''}${isViewTransitioning ? ' is-view-shifting' : ''}`} id="physique-model" aria-label="Interactive 3D physique model">
       <Canvas
         className="physique-canvas"
         camera={{ position: cameraViews.front, fov: 32, near: 0.1, far: 80 }}
@@ -104,11 +106,12 @@ function PhysiqueViewport({
           reducedMotion={reducedMotion}
           selectedRegion={selectedRegion}
           previewPlaying={previewPlaying}
+          calloutLayoutRef={calloutLayoutRef}
         />
       </Canvas>
 
       <div className="stage-edge stage-edge-top" aria-hidden="true" />
-      <MuscleCallouts activeRegionId={selectedRegion ?? hoveredRegion} />
+      <MuscleCallouts activeRegionId={selectedRegion ?? hoveredRegion} layoutRef={calloutLayoutRef} />
       {showMeasurements && viewMode === 'front' && (
         <div className="measurement-guides" aria-hidden="true">
           <span className="guide-shoulder">SHOULDER SPAN</span>

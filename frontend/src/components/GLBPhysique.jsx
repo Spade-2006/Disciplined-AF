@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import { clone as cloneSkinnedModel } from 'three/addons/utils/SkeletonUtils.js'
 import { Box3, BoxGeometry, DoubleSide, Vector3 } from 'three'
-import { MUSCLE_ZONES } from './muscleRegionZones.js'
+import MuscleCalloutProjector from './MuscleCalloutProjector.jsx'
+import MuscleHighlight from './MuscleHighlight.jsx'
+import { isZoneVisibleInView, MUSCLE_ZONES } from './muscleRegionZones.js'
 
 const emptyMap = Object.freeze({})
 const MODEL_GROUND_Y = -2.74
@@ -30,6 +31,10 @@ function MusclePickZone({ zone, onHover, onSelect }) {
         event.stopPropagation()
         onHover(zone.id)
       }}
+      onPointerDown={(event) => {
+        event.stopPropagation()
+        onHover(zone.id)
+      }}
       onPointerOut={(event) => {
         event.stopPropagation()
         onHover(null)
@@ -44,19 +49,9 @@ function MusclePickZone({ zone, onHover, onSelect }) {
   )
 }
 
-function RiggedModel({ model, modelConfig, physique, hoveredRegion, selectedRegion }) {
+function RiggedModel({ model, modelConfig, physique }) {
   const regionNodeMap = modelConfig?.regionNodeMap ?? emptyMap
   const morphTargetMap = modelConfig?.morphTargetMap ?? emptyMap
-  const regionMeshes = useMemo(() => {
-    const meshes = []
-    model.traverse((node) => {
-      if (!node.isMesh) return
-      const regionId = node.userData.muscleRegionId ?? regionNodeMap[node.name]
-      if (regionId) meshes.push({ node, regionId })
-    })
-    return meshes
-  }, [model, regionNodeMap])
-  const activeRegionRef = useRef(null)
 
   useEffect(() => {
     model.traverse((node) => {
@@ -79,32 +74,6 @@ function RiggedModel({ model, modelConfig, physique, hoveredRegion, selectedRegi
     })
   }, [model, regionNodeMap, morphTargetMap, physique])
 
-  useEffect(() => {
-    regionMeshes.forEach(({ node }) => {
-      const materials = Array.isArray(node.material) ? node.material : [node.material]
-      materials.forEach((material) => {
-        if (material.emissive) material.emissive.set('#ad303d')
-      })
-    })
-  }, [regionMeshes])
-
-  useEffect(() => {
-    activeRegionRef.current = selectedRegion ?? hoveredRegion
-  }, [hoveredRegion, selectedRegion])
-
-  useFrame((_, delta) => {
-    const activeRegion = activeRegionRef.current
-    const easing = 1 - Math.exp(-delta * 14)
-    regionMeshes.forEach(({ node, regionId }) => {
-      const targetIntensity = activeRegion === regionId ? 0.22 : 0
-      const materials = Array.isArray(node.material) ? node.material : [node.material]
-      materials.forEach((material) => {
-        if (!material.emissive) return
-        material.emissiveIntensity += (targetIntensity - material.emissiveIntensity) * easing
-      })
-    })
-  })
-
   return <primitive object={model} />
 }
 
@@ -117,7 +86,10 @@ function GLBPhysique({
   selectedRegion,
   onHover,
   onSelect,
+  calloutLayoutRef,
+  reducedMotion,
 }) {
+  const rootRef = useRef(null)
   const { scene } = useGLTF(url)
   const model = useMemo(() => {
     const clone = cloneSkinnedModel(scene)
@@ -150,63 +122,34 @@ function GLBPhysique({
     }
   }, [bounds, modelConfig, physique])
 
-  const visibleZones = viewMode === 'front'
-    ? MUSCLE_ZONES.filter((zone) => !['back', 'posterior'].includes(zone.layer))
-    : viewMode === 'back'
-      ? MUSCLE_ZONES.filter((zone) => ['back', 'posterior'].includes(zone.layer))
-      : MUSCLE_ZONES.filter((zone) => ['lateral', 'front', 'back', 'posterior'].includes(zone.layer))
+  const visibleZones = MUSCLE_ZONES.filter((zone) => isZoneVisibleInView(zone, viewMode))
 
   return (
-    <group name="physique-model-root" rotation={modelConfig.rotation ?? [0, 0, 0]}>
+    <group ref={rootRef} name="physique-model-root" rotation={modelConfig.rotation ?? [0, 0, 0]}>
       <group position={fit.position} scale={fit.scale}>
         <RiggedModel
           model={model}
           modelConfig={modelConfig}
           physique={physique}
-          hoveredRegion={hoveredRegion}
-          selectedRegion={selectedRegion}
         />
       </group>
       {visibleZones.map((zone) => (
         <MusclePickZone key={zone.id} zone={zone} onHover={onHover} onSelect={onSelect} />
       ))}
-    </group>
-  )
-}
-
-export function MuscleTarget({ regionId }) {
-  const groupRef = useRef(null)
-  const lightRef = useRef(null)
-  const materialRef = useRef(null)
-  const opacity = useRef(0)
-  const targetPosition = useRef(new Vector3())
-  const zone = MUSCLE_ZONES.find((region) => region.id === regionId)
-  useEffect(() => {
-    if (!zone) return
-    targetPosition.current.fromArray(zone.position)
-    if (opacity.current < 0.01) groupRef.current?.position.copy(targetPosition.current)
-  }, [zone])
-
-  useFrame((_, delta) => {
-    const easing = 1 - Math.exp(-delta * 14)
-    opacity.current += ((zone ? 1 : 0) - opacity.current) * easing
-
-    if (groupRef.current) {
-      if (zone) groupRef.current.position.lerp(targetPosition.current, easing)
-      groupRef.current.visible = opacity.current > 0.01 || Boolean(zone)
-      groupRef.current.scale.setScalar(0.9 + opacity.current * 0.1)
-    }
-    if (lightRef.current) lightRef.current.intensity = 1.1 * opacity.current
-    if (materialRef.current) materialRef.current.opacity = 0.58 * opacity.current
-  })
-
-  return (
-    <group ref={groupRef} visible={false}>
-      <pointLight ref={lightRef} color="#ee454e" intensity={0} distance={1.45} />
-      <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[0.15, 0.008, 6, 40]} />
-        <meshBasicMaterial ref={materialRef} color="#ef545a" toneMapped={false} transparent opacity={0} depthWrite={false} />
-      </mesh>
+      <MuscleHighlight
+        hoveredRegion={hoveredRegion}
+        selectedRegion={selectedRegion}
+        viewMode={viewMode}
+        reducedMotion={reducedMotion}
+      />
+      {calloutLayoutRef && (
+        <MuscleCalloutProjector
+          rootRef={rootRef}
+          viewMode={viewMode}
+          layoutRef={calloutLayoutRef}
+          activeRegionId={selectedRegion ?? hoveredRegion}
+        />
+      )}
     </group>
   )
 }
