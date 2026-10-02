@@ -2,41 +2,128 @@ const L = (id) => `${id}-left`
 const R = (id) => `${id}-right`
 const pair = (id) => [R(id), L(id)]
 
+/**
+ * Anatomical callout catalog structured precisely after the cinematic reference design:
+ * Left column: TRAPS, DELTOID, PECTORALIS, BICEPS, FOREARMS, ABS, QUADS, CALVES
+ * Right column: NECK, LATS, SERRATUS, OBLIQUES, TRICEPS, HAMSTRINGS, GLUTES
+ */
 export const MUSCLE_CALLOUT_GROUPS = [
+  // ─── LEFT COLUMN (Viewer's Left) ───
   {
-    id: 'chest',
-    label: 'CHEST',
+    id: 'traps',
+    label: 'TRAPS',
+    side: 'left',
+    views: ['front', 'side', 'back'],
+    regionIds: [R('trapezius-upper'), L('trapezius-upper')],
+    defaultY: 16,
+  },
+  {
+    id: 'deltoid',
+    label: 'DELTOID',
+    side: 'left',
+    views: ['front', 'side', 'back'],
+    regionIds: [
+      R('deltoid-anterior'),
+      R('deltoid-lateral'),
+      R('deltoid-posterior'),
+      L('deltoid-anterior'),
+    ],
+    defaultY: 21,
+  },
+  {
+    id: 'pectoralis',
+    label: 'PECTORALIS',
     side: 'left',
     views: ['front', 'side'],
     regionIds: pair('pectoralis-major'),
-  },
-  {
-    id: 'front-delts',
-    label: 'FRONT DELTS',
-    side: 'right',
-    views: ['front'],
-    regionIds: pair('deltoid-anterior'),
-  },
-  {
-    id: 'side-delts',
-    label: 'SIDE DELTS',
-    side: 'right',
-    views: ['front', 'side'],
-    regionIds: pair('deltoid-lateral'),
-  },
-  {
-    id: 'rear-delts',
-    label: 'REAR DELTS',
-    side: 'right',
-    views: ['back'],
-    regionIds: pair('deltoid-posterior'),
+    defaultY: 27,
   },
   {
     id: 'biceps',
     label: 'BICEPS',
     side: 'left',
     views: ['front', 'side'],
-    regionIds: pair('biceps-brachii'),
+    regionIds: [R('biceps-brachii'), L('biceps-brachii')],
+    defaultY: 33,
+  },
+  {
+    id: 'forearms',
+    label: 'FOREARMS',
+    side: 'left',
+    views: ['front', 'side', 'back'],
+    regionIds: [...pair('forearm-flexors'), ...pair('forearm-extensors')],
+    defaultY: 38,
+  },
+  {
+    id: 'abs',
+    label: 'ABS',
+    side: 'left',
+    views: ['front'],
+    regionIds: [
+      ...pair('rectus-abdominis-upper'),
+      ...pair('rectus-abdominis-middle'),
+      ...pair('rectus-abdominis-lower'),
+    ],
+    defaultY: 45,
+  },
+  {
+    id: 'quads',
+    label: 'QUADS',
+    side: 'left',
+    views: ['front', 'side'],
+    regionIds: [
+      ...pair('rectus-femoris'),
+      ...pair('vastus-lateralis'),
+      ...pair('vastus-medialis'),
+      ...pair('adductors'),
+    ],
+    defaultY: 57,
+  },
+  {
+    id: 'calves',
+    label: 'CALVES',
+    side: 'left',
+    views: ['front', 'side', 'back'],
+    regionIds: [
+      ...pair('gastrocnemius'),
+      ...pair('soleus'),
+      ...pair('tibialis-anterior'),
+    ],
+    defaultY: 69,
+  },
+
+  // ─── RIGHT COLUMN (Viewer's Right) ───
+  {
+    id: 'neck',
+    label: 'NECK',
+    side: 'right',
+    views: ['front', 'side', 'back'],
+    regionIds: [L('trapezius-upper')],
+    defaultY: 16,
+  },
+  {
+    id: 'lats',
+    label: 'LATS',
+    side: 'right',
+    views: ['front', 'side', 'back'],
+    regionIds: pair('latissimus-dorsi'),
+    defaultY: 25,
+  },
+  {
+    id: 'serratus',
+    label: 'SERRATUS',
+    side: 'right',
+    views: ['front', 'side'],
+    regionIds: [L('external-oblique')],
+    defaultY: 31,
+  },
+  {
+    id: 'obliques',
+    label: 'OBLIQUES',
+    side: 'right',
+    views: ['front', 'side'],
+    regionIds: pair('external-oblique'),
+    defaultY: 37,
   },
   {
     id: 'triceps',
@@ -44,116 +131,67 @@ export const MUSCLE_CALLOUT_GROUPS = [
     side: 'right',
     views: ['front', 'side', 'back'],
     regionIds: pair('triceps-brachii'),
-  },
-  {
-    id: 'forearms',
-    label: 'FOREARMS',
-    side: 'left',
-    views: ['front', 'back'],
-    regionIds: [...pair('forearm-flexors'), ...pair('forearm-extensors')],
-  },
-  {
-    id: 'traps',
-    label: 'TRAPS',
-    side: 'left',
-    views: ['back'],
-    regionIds: pair('trapezius-upper'),
-  },
-  {
-    id: 'mid-back',
-    label: 'MID BACK',
-    side: 'left',
-    views: ['back'],
-    regionIds: pair('trapezius-middle'),
-  },
-  {
-    id: 'lats',
-    label: 'LATS',
-    side: 'right',
-    views: ['back'],
-    regionIds: pair('latissimus-dorsi'),
-  },
-  {
-    id: 'erectors',
-    label: 'ERECTORS',
-    side: 'left',
-    views: ['back'],
-    regionIds: pair('spinal-erectors'),
-  },
-  {
-    id: 'upper-abs',
-    label: 'UPPER ABS',
-    side: 'right',
-    views: ['front'],
-    regionIds: pair('rectus-abdominis-upper'),
-  },
-  {
-    id: 'lower-abs',
-    label: 'MID / LOWER ABS',
-    side: 'right',
-    views: ['front'],
-    regionIds: [...pair('rectus-abdominis-middle'), ...pair('rectus-abdominis-lower')],
-  },
-  {
-    id: 'obliques',
-    label: 'OBLIQUES',
-    side: 'left',
-    views: ['front', 'side'],
-    regionIds: pair('external-oblique'),
-  },
-  {
-    id: 'glutes',
-    label: 'GLUTES',
-    side: 'right',
-    views: ['side', 'back'],
-    regionIds: [...pair('gluteus-maximus'), ...pair('gluteus-medius')],
-  },
-  {
-    id: 'quads',
-    label: 'QUADS',
-    side: 'left',
-    views: ['front', 'side'],
-    regionIds: [...pair('rectus-femoris'), ...pair('vastus-lateralis'), ...pair('vastus-medialis')],
-  },
-  {
-    id: 'adductors',
-    label: 'ADDUCTORS',
-    side: 'left',
-    views: ['front'],
-    regionIds: pair('adductors'),
+    defaultY: 53,
   },
   {
     id: 'hamstrings',
     label: 'HAMSTRINGS',
     side: 'right',
-    views: ['side', 'back'],
+    views: ['front', 'side', 'back'],
     regionIds: [...pair('biceps-femoris'), ...pair('semitendinosus')],
+    defaultY: 61,
   },
   {
-    id: 'calves',
-    label: 'CALVES',
-    side: 'left',
-    views: ['side', 'back'],
-    regionIds: [...pair('gastrocnemius'), ...pair('soleus')],
-  },
-  {
-    id: 'tibialis',
-    label: 'TIBIALIS',
-    side: 'left',
-    views: ['front'],
-    regionIds: pair('tibialis-anterior'),
+    id: 'glutes',
+    label: 'GLUTES',
+    side: 'right',
+    views: ['front', 'side', 'back'],
+    regionIds: [...pair('gluteus-maximus'), ...pair('gluteus-medius')],
+    defaultY: 68,
   },
 ]
 
-const REGION_TO_GROUP = new Map(
-  MUSCLE_CALLOUT_GROUPS.flatMap((group) => group.regionIds.map((regionId) => [regionId, group])),
-)
+// Backward-compatibility aliases for earlier ID references
+const GROUP_ALIASES = {
+  chest: 'pectoralis',
+  'front-delts': 'deltoid',
+  'side-delts': 'deltoid',
+  'rear-delts': 'deltoid',
+  'upper-abs': 'abs',
+  'lower-abs': 'abs',
+}
+
+const REGION_TO_GROUP = new Map()
+
+// Populate direct mappings
+for (const group of MUSCLE_CALLOUT_GROUPS) {
+  for (const regionId of group.regionIds) {
+    if (!REGION_TO_GROUP.has(regionId)) {
+      REGION_TO_GROUP.set(regionId, group)
+    }
+  }
+}
 
 export function getCalloutGroup(regionId) {
-  return REGION_TO_GROUP.get(regionId) ?? null
+  if (!regionId) return null
+  const direct = REGION_TO_GROUP.get(regionId)
+  if (direct) return direct
+
+  // Check alias
+  const aliasId = GROUP_ALIASES[regionId]
+  if (aliasId) {
+    return MUSCLE_CALLOUT_GROUPS.find((g) => g.id === aliasId) ?? null
+  }
+
+  // Fallback matching by token
+  for (const group of MUSCLE_CALLOUT_GROUPS) {
+    if (group.id === regionId) return group
+  }
+  return null
 }
 
 export function isCalloutGroupInView(group, viewMode) {
+  if (!group || !group.views) return true
   return group.views.includes(viewMode)
 }
 
@@ -163,12 +201,14 @@ export function createCalloutLayout() {
       group.id,
       {
         id: group.id,
+        label: group.label,
         visible: false,
         opacity: 0,
         side: group.side,
         anchorX: 50,
-        anchorY: 50,
-        labelY: 50,
+        anchorY: group.defaultY,
+        labelX: group.side === 'left' ? 24 : 76,
+        labelY: group.defaultY,
       },
     ]),
   )

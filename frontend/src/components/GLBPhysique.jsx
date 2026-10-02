@@ -90,7 +90,7 @@ function GLBPhysique({
   reducedMotion,
 }) {
   const rootRef = useRef(null)
-  const { scene } = useGLTF(url)
+  const { scene } = useGLTF(url, '/draco/')
   const model = useMemo(() => {
     const clone = cloneSkinnedModel(scene)
     clone.traverse((node) => {

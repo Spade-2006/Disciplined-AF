@@ -37,20 +37,52 @@ function RingMarkers({ count, radius, y, size, color, metallic = false }) {
   )
 }
 
-function Platform({ reducedMotion, probeLevel = 0 }) {
+function Platform({ reducedMotion, probeLevel = 0, scrollProgressRef, scannerValues }) {
   const edgeRef = useRef(null)
   const coreRef = useRef(null)
   const rotorRef = useRef(null)
   const indexRingRef = useRef(null)
+  const platformLightRef = useRef(null)
 
   useFrame(({ clock }) => {
     if (reducedMotion) return
+    const p = scrollProgressRef?.current ?? (probeLevel > 0 ? 0.95 : 0)
     const probe = probeLevel
-    const pulse = 0.16 + (Math.sin(clock.elapsedTime * (0.82 + probe * 0.28)) + 1) * (0.07 + probe * 0.03)
-    if (edgeRef.current) edgeRef.current.material.opacity = pulse + probe * 0.1
-    if (coreRef.current) coreRef.current.material.emissiveIntensity = 0.07 + pulse * 0.14 + probe * 0.06
-    if (rotorRef.current) rotorRef.current.rotation.y = clock.elapsedTime * (0.035 + probe * 0.028)
-    if (indexRingRef.current) indexRingRef.current.rotation.y = -clock.elapsedTime * (0.018 + probe * 0.012)
+    const time = clock.elapsedTime
+    const liveSurge = scannerValues?.current?.platformSurge ?? 0
+
+    // Sequence progression response:
+    // When scanner sweeps over core & lower body, platform responds with high-energy surge
+    const isScanSurge = p >= 0.42 && p <= 0.78
+    const baseSurgeAmount = isScanSurge ? Math.sin(((p - 0.42) / 0.36) * Math.PI) : 0
+    const scanSurgeAmount = Math.max(baseSurgeAmount, liveSurge)
+
+    const pulse = 0.16 + (Math.sin(time * (0.82 + probe * 0.28 + scanSurgeAmount * 1.5)) + 1) * (0.07 + probe * 0.03 + scanSurgeAmount * 0.12)
+    
+    if (edgeRef.current) {
+      edgeRef.current.material.opacity = pulse + probe * 0.1 + scanSurgeAmount * 0.35
+    }
+    
+    if (coreRef.current) {
+      // Red core emissive surges during scan pass
+      const targetEmissive = 0.07 + pulse * 0.14 + probe * 0.06 + scanSurgeAmount * 0.45
+      coreRef.current.material.emissiveIntensity = targetEmissive
+    }
+
+    // Rotor accelerates smoothly during scan
+    const rotorSpeed = 0.035 + probe * 0.028 + scanSurgeAmount * 0.14 + (p > 0.2 && p < 0.9 ? 0.04 : 0)
+    if (rotorRef.current) {
+      rotorRef.current.rotation.y = time * rotorSpeed
+    }
+
+    if (indexRingRef.current) {
+      const indexSpeed = 0.018 + probe * 0.012 + scanSurgeAmount * 0.08
+      indexRingRef.current.rotation.y = -time * indexSpeed
+    }
+
+    if (platformLightRef.current) {
+      platformLightRef.current.intensity = 0.55 + probe * 0.4 + scanSurgeAmount * 0.8
+    }
   })
 
   return (
@@ -95,7 +127,7 @@ function Platform({ reducedMotion, probeLevel = 0 }) {
         <group ref={indexRingRef} position={[0, 0.15, 0]}>
           <RingMarkers count={8} radius={1.43} y={0} size={[0.11, 0.018, 0.035]} color={LAB_RED} />
         </group>
-        <pointLight position={[0, 0.32, 0]} intensity={0.55} color={LAB_CYAN_BRIGHT} distance={3.5} />
+        <pointLight ref={platformLightRef} position={[0, 0.32, 0]} intensity={0.55} color={LAB_CYAN_BRIGHT} distance={3.5} />
       </group>
     </group>
   )

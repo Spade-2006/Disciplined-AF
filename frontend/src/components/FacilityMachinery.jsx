@@ -3,7 +3,8 @@ import { useFrame } from '@react-three/fiber'
 import { Object3D } from 'three'
 import { LAB_CYAN, LAB_RED } from './labPalette.js'
 
-const wallAngles = [0, Math.PI / 2, Math.PI, Math.PI * 1.5]
+// Left, back, and right wall bays; front aperture left open for camera
+const wallAngles = [Math.PI / 2, Math.PI, Math.PI * 1.5]
 const wallRadius = 12.58
 const trussY = 4.48
 const trussSpan = 6.35

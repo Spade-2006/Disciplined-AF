@@ -1,4 +1,5 @@
-import { memo } from 'react'
+import { memo, useRef } from 'react'
+import { useFrame } from '@react-three/fiber'
 import { Grid } from '@react-three/drei'
 import { LAB_CYAN, LAB_RED } from './labPalette.js'
 import FacilityMachinery from './FacilityMachinery.jsx'
@@ -6,13 +7,11 @@ import FacilityMachinery from './FacilityMachinery.jsx'
 const gantrySides = [-1, 1]
 const wallRibs = [-10, -7, -4, -1, 2, 5, 8, 10]
 const insetPanels = [-3.7, 3.7]
-const chamberSides = Array.from({ length: 4 }, (_, index) => {
-  const angle = (index * Math.PI) / 2
-  return {
-    angle,
-    position: [Math.sin(angle) * 13.2, 0, Math.cos(angle) * 13.2],
-  }
-})
+// Open front viewing aperture: include left, back, and right walls; omit front wall (angle = 0)
+const chamberSides = [Math.PI / 2, Math.PI, Math.PI * 1.5].map((angle) => ({
+  angle,
+  position: [Math.sin(angle) * 13.2, 0, Math.cos(angle) * 13.2],
+}))
 
 function RedFixture({ position, size = [0.035, 1.8, 0.04] }) {
   return (
@@ -23,9 +22,39 @@ function RedFixture({ position, size = [0.035, 1.8, 0.04] }) {
   )
 }
 
-function Environment({ reducedMotion }) {
+function Environment({ reducedMotion, scrollProgressRef }) {
+  const envGroupRef = useRef(null)
+  const redLightRef = useRef(null)
+  const cyanLightRef = useRef(null)
+  const ceilingLightRef = useRef(null)
+
+  useFrame((_, delta) => {
+    if (reducedMotion) return
+    const p = scrollProgressRef?.current ?? 0
+    const ease = 1 - Math.exp(-delta * 4)
+
+    if (envGroupRef.current) {
+      const targetParallaxY = (p - 0.5) * 0.38
+      const targetParallaxRot = (p - 0.5) * 0.07
+      envGroupRef.current.position.y += (targetParallaxY - envGroupRef.current.position.y) * ease
+      envGroupRef.current.rotation.y += (targetParallaxRot - envGroupRef.current.rotation.y) * ease
+    }
+
+    if (redLightRef.current) {
+      const targetRed = 2.2 + p * 1.6
+      redLightRef.current.intensity += (targetRed - redLightRef.current.intensity) * ease
+    }
+    if (cyanLightRef.current) {
+      const targetCyan = 1.8 + p * 1.4
+      cyanLightRef.current.intensity += (targetCyan - cyanLightRef.current.intensity) * ease
+    }
+    if (ceilingLightRef.current) {
+      const targetCeil = 2.2 - p * 0.9 // softens overhead wash so physique pops forward
+      ceilingLightRef.current.intensity += (targetCeil - ceilingLightRef.current.intensity) * ease
+    }
+  })
   return (
-    <group name="physique-facility">
+    <group ref={envGroupRef} name="physique-facility">
       <mesh position={[0, -3.06, -0.4]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
         <planeGeometry args={[70, 70]} />
         <meshStandardMaterial color="#252c2e" metalness={0.78} roughness={0.32} />
@@ -104,9 +133,22 @@ function Environment({ reducedMotion }) {
         infiniteGrid
       />
 
-      <spotLight position={[0, 6.5, 2.3]} angle={0.42} penumbra={0.9} intensity={12} color="#f4f6f4" castShadow />
-      <pointLight position={[-3.4, 1.2, -1.2]} intensity={3.2} color={LAB_RED} distance={8} />
-      <pointLight position={[3.5, 1.3, -1.4]} intensity={2.4} color={LAB_CYAN} distance={7} />
+      <spotLight
+        ref={ceilingLightRef}
+        position={[0, 6.5, 2.3]}
+        angle={0.42}
+        penumbra={0.9}
+        intensity={12}
+        color="#f4f6f4"
+        castShadow
+        shadow-mapSize={[1024, 1024]}
+        shadow-camera-near={0.5}
+        shadow-camera-far={28}
+        shadow-bias={-0.00015}
+        shadow-normalBias={0.025}
+      />
+      <pointLight ref={redLightRef} position={[-3.4, 1.2, -1.2]} intensity={3.2} color={LAB_RED} distance={8} />
+      <pointLight ref={cyanLightRef} position={[3.5, 1.3, -1.4]} intensity={2.4} color={LAB_CYAN} distance={7} />
       <pointLight position={[0, 3.2, -3.1]} intensity={1.5} color="#edf1f0" distance={7} />
     </group>
   )
