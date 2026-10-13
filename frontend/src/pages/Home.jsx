@@ -8,6 +8,7 @@ import { DEFAULT_PHYSIQUE_PROFILE } from '../components/physiqueProfile.js'
 import { EASING, gsap, ScrollTrigger } from '../utils/gsap.js'
 import { useGSAP, useReducedMotion } from '../hooks/index.js'
 import './LandingExperience.css'
+import MetallicButton from '../components/ui/metallic-button.tsx'
 
 const PhysiqueViewport = lazy(() => import('../components/PhysiqueViewport.jsx'))
 
@@ -259,17 +260,17 @@ function Home() {
 								<span className="nav-item-label">LAB OVERVIEW</span>
 								<span className="nav-item-bar" aria-hidden="true" />
 							</button>
-							<button type="button" onClick={() => navigate('/analysis')}>
+							<button type="button" onClick={() => navigate('/login')}>
 								<span className="nav-item-index" aria-hidden="true">02</span>
 								<span className="nav-item-label">ANALYSIS SCAN</span>
 								<span className="nav-item-bar" aria-hidden="true" />
 							</button>
-							<button type="button" onClick={() => navigate('/features')}>
+							<button type="button" onClick={() => navigate('/login')}>
 								<span className="nav-item-index" aria-hidden="true">03</span>
 								<span className="nav-item-label">FEATURES</span>
 								<span className="nav-item-bar" aria-hidden="true" />
 							</button>
-							<button type="button" onClick={() => navigate('/preview')}>
+							<button type="button" onClick={() => navigate('/login')}>
 								<span className="nav-item-index" aria-hidden="true">04</span>
 								<span className="nav-item-label">PREVIEW</span>
 								<span className="nav-item-bar" aria-hidden="true" />
@@ -288,15 +289,16 @@ function Home() {
 
 						{/* CTA group */}
 						<div className="header-cta-group">
-							<button className="header-enter" type="button" onClick={() => navigate('/login')}>
-								<span className="header-enter-label">LOG IN</span>
-								<span className="header-enter-arrow" aria-hidden="true">→</span>
-							</button>
-							<button className="header-enter-system" type="button" onClick={() => navigate('/signup')}>
-								<span className="header-enter-system-prefix" aria-hidden="true">⬡</span>
-								<span className="header-enter-system-label">SIGN UP</span>
-								<span className="header-enter-system-arrow" aria-hidden="true">↗</span>
-							</button>
+							<MetallicButton 
+								label="LOG IN" 
+								onClick={() => navigate('/login')} 
+								className="header-enter"
+							/>
+							<MetallicButton 
+								label="SIGN UP" 
+								onClick={() => navigate('/signup')} 
+								className="header-enter-system"
+							/>
 						</div>
 					</div>
 
@@ -357,7 +359,7 @@ function Home() {
 					<div className="footer-legal">
 						<small>© Disciplined AF — All Rights Reserved</small>
 						<nav aria-label="Legal links">
-							<Link to="/privacy-policy">PRIVACY POLICY</Link>
+							<Link to="/privacy">PRIVACY POLICY</Link>
 							<Link to="/terms-and-conditions">TERMS &amp; CONDITIONS</Link>
 						</nav>
 					</div>

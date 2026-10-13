@@ -345,69 +345,36 @@
 }
 
 /* Secondary: LOG IN */
+/* Secondary: LOG IN */
 .header-enter {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0 12px;
-  height: 32px;
-  border: 1px solid rgb(216 226 224 / 14%);
   background: transparent;
-  color: #8d9a9b;
-  font-family: inherit;
-  font-size: 7px;
-  font-weight: 700;
-  letter-spacing: 0.13em;
-  white-space: nowrap;
+  border: none;
+  padding: 0;
   cursor: pointer;
-  transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
   flex-shrink: 0;
+  display: inline-flex;
 }
 
 .header-enter:hover {
-  color: var(--lab-white);
-  border-color: rgb(216 226 224 / 30%);
-  background: rgb(216 226 224 / 5%);
+  background: transparent;
+  border: none;
 }
 
 .header-enter:active { opacity: 0.8; }
 
-.header-enter-label { font-size: 7px; letter-spacing: 0.13em; }
-
-.header-enter-arrow {
-  font-size: 11px;
-  font-weight: 400;
-  transition: transform 160ms ease;
-}
-
-.header-enter:hover .header-enter-arrow { transform: translateX(2px); }
+.header-enter-label { display: none; }
+.header-enter-arrow { display: none; }
+.header-enter:hover .header-enter-arrow { transform: none; }
 
 /* Primary: ENTER THE SYSTEM */
 .header-enter-system {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  padding: 0 16px;
-  height: 36px;
-  border: 1px solid rgb(219 60 71 / 65%);
-  background: linear-gradient(135deg, rgb(185 48 59 / 90%) 0%, rgb(155 33 43 / 85%) 100%);
-  box-shadow:
-    inset 0 1px rgb(255 255 255 / 8%),
-    inset 0 0 0 1px rgb(219 60 71 / 12%),
-    0 4px 20px rgb(155 33 43 / 24%);
-  color: #fff;
-  font-family: inherit;
-  font-size: 7.5px;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  white-space: nowrap;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
   cursor: pointer;
   flex-shrink: 0;
-  transition:
-    background 200ms ease,
-    border-color 200ms ease,
-    box-shadow 200ms ease,
-    transform 140ms ease;
+  display: inline-flex;
 }
 
 .header-enter-system-prefix {

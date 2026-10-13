@@ -1,0 +1,289 @@
+.fitness-onboarding {
+	position: relative;
+	min-height: 100vh;
+	min-height: 100svh;
+	overflow-x: hidden;
+	padding: 22px clamp(18px, 4vw, 56px) 36px;
+	background: #000;
+	color: #f0efed;
+	isolation: isolate;
+}
+
+.fitness-onboarding .account-smoke {
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background:
+		radial-gradient(ellipse at 12% 22%, rgb(140 19 34 / 19%), transparent 46%),
+		radial-gradient(ellipse at 88% 80%, rgb(108 16 29 / 16%), transparent 50%),
+	#000;
+}
+
+.fitness-onboarding .account-smoke__canvas,
+.fitness-onboarding .account-smoke__veil {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.fitness-onboarding .account-smoke__canvas { opacity: 0.58; }
+.fitness-onboarding .account-smoke__veil { background: linear-gradient(110deg, rgb(0 0 0 / 18%), transparent 55%, rgb(0 0 0 / 28%)); }
+
+.fitness-topbar,
+.fitness-layout {
+	position: relative;
+	z-index: 1;
+	width: min(1320px, 100%);
+	margin-inline: auto;
+}
+
+.fitness-topbar { display: flex; min-height: 48px; align-items: center; justify-content: space-between; }
+
+.fitness-brand {
+	display: inline-flex;
+	align-items: center;
+	gap: 11px;
+	color: #f0efed;
+	font-size: 10px;
+	font-weight: 800;
+	letter-spacing: 0.13em;
+	text-decoration: none;
+}
+
+.fitness-brand__mark {
+	display: grid;
+	width: 36px;
+	height: 36px;
+	place-items: center;
+	border: 1px solid rgb(228 75 84 / 72%);
+	color: #e44b54;
+	font-family: var(--font-display, 'Barlow Condensed', sans-serif);
+	font-size: 17px;
+}
+
+.fitness-brand small { display: block; margin-top: 3px; color: #777477; font-size: 7px; letter-spacing: 0.17em; }
+
+.fitness-progress {
+	display: grid;
+	grid-template-columns: auto auto 82px;
+	align-items: center;
+	gap: 12px;
+}
+
+.fitness-progress strong { color: #81797b; font-size: 10px; letter-spacing: 0.1em; }
+.fitness-progress strong:first-letter { color: #f0787e; }
+.fitness-progress strong i { color: #51484a; font-style: normal; }
+.fitness-progress > span { color: #aaa3a5; font-size: 7px; letter-spacing: 0.12em; white-space: nowrap; }
+.fitness-progress > div { height: 2px; background: #292326; }
+.fitness-progress > div i { display: block; width: 100%; height: 100%; background: #e44b54; }
+
+.fitness-layout {
+	display: grid;
+	grid-template-columns: minmax(240px, 0.78fr) minmax(0, 1.45fr);
+	align-items: center;
+	gap: clamp(32px, 5vw, 70px);
+	margin-top: clamp(24px, 4vh, 42px);
+}
+
+.fitness-intro { max-width: 410px; animation: fitness-enter 520ms ease-out both; }
+.fitness-kicker { display: flex; align-items: center; gap: 9px; margin: 0; color: #e35a62; font-size: 9px; font-weight: 800; letter-spacing: 0.15em; }
+.fitness-kicker > span { width: 18px; height: 1px; background: currentColor; }
+
+.fitness-intro h1 {
+	margin: 20px 0 14px;
+	color: #f2f0ee;
+	font-family: var(--font-display, 'Barlow Condensed', sans-serif);
+	font-size: clamp(58px, 5.85vw, 84px);
+	font-weight: 700;
+	line-height: 0.92;
+	letter-spacing: 0;
+}
+
+.fitness-intro h1 em { color: #e44b54; font-style: normal; }
+.fitness-intro__copy { max-width: 335px; margin: 0; color: #aaa5a6; font-size: 12px; line-height: 1.8; }
+
+.fitness-module {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	max-width: 330px;
+	margin-top: 30px;
+	padding: 14px 0;
+	border-top: 1px solid rgb(255 255 255 / 10%);
+	border-bottom: 1px solid rgb(255 255 255 / 10%);
+}
+
+.fitness-module__icon { display: grid; width: 36px; height: 36px; flex: 0 0 auto; place-items: center; border: 1px solid rgb(228 75 84 / 38%); color: #e44b54; }
+.fitness-module > div:last-child { display: grid; gap: 5px; }
+.fitness-module strong { color: #ded9da; font-size: 8px; letter-spacing: 0.12em; }
+.fitness-module small { color: #777174; font-size: 7px; letter-spacing: 0.08em; }
+
+.fitness-back { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; color: #928b8d; font-size: 8px; font-weight: 700; letter-spacing: 0.1em; text-decoration: none; transition: color 160ms ease; }
+.fitness-back:hover { color: #f0787e; }
+
+.fitness-panel {
+	min-width: 0;
+	padding: clamp(20px, 2.4vw, 30px);
+	border: 1px solid rgb(255 255 255 / 11%);
+	border-top: 2px solid #c93843;
+	background: linear-gradient(145deg, rgb(17 16 17 / 97%), rgb(7 7 8 / 96%) 48%, rgb(12 9 10 / 97%));
+	box-shadow: 0 28px 90px rgb(0 0 0 / 68%), inset 0 1px rgb(255 255 255 / 3%);
+	animation: fitness-enter 650ms 70ms ease-out both;
+}
+
+.fitness-panel__heading { margin-bottom: 16px; }
+.fitness-panel__heading > p:first-child { display: flex; justify-content: space-between; gap: 10px; margin: 0 0 7px; font-size: 8px; font-weight: 800; letter-spacing: 0.13em; }
+.fitness-panel__heading > p:first-child span:first-child { color: #e35a62; }
+.fitness-panel__heading > p:first-child span:last-child { color: #777174; font-size: 7px; }
+.fitness-panel__heading > p:first-child i { color: #e35a62; font-style: normal; }
+.fitness-panel__heading h2 { margin: 0; color: #f1efed; font-family: var(--font-display, 'Barlow Condensed', sans-serif); font-size: 28px; font-weight: 700; }
+.fitness-panel__heading > p:last-child { margin: 5px 0 0; color: #8f898b; font-size: 10px; line-height: 1.5; }
+
+.fitness-choice-group { min-width: 0; margin: 0; padding: 0; border: 0; }
+.fitness-choice-group legend { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 9px; padding: 0; color: #bdb7b8; font-size: 8px; font-weight: 800; letter-spacing: 0.12em; }
+.fitness-choice-group legend small { color: #d15860; font-size: 7px; letter-spacing: 0.08em; }
+.fitness-choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+
+.fitness-choice { position: relative; display: block; min-width: 0; cursor: pointer; }
+.fitness-choice input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.fitness-choice__body {
+	position: relative;
+	display: grid;
+	min-height: 59px;
+	grid-template-columns: auto 1fr auto;
+	align-content: center;
+	align-items: center;
+	gap: 4px 9px;
+	padding: 9px 11px;
+	border: 1px solid rgb(255 255 255 / 10%);
+	background: linear-gradient(140deg, #111011, #080808);
+	transition: border-color 170ms ease, background 170ms ease, transform 170ms ease, box-shadow 170ms ease;
+}
+
+.fitness-choice:hover .fitness-choice__body { transform: translateY(-1px); border-color: rgb(228 75 84 / 45%); }
+.fitness-choice[data-selected='true'] .fitness-choice__body { border-color: rgb(228 75 84 / 72%); background: linear-gradient(135deg, rgb(107 25 33 / 45%), #0c090a 78%); box-shadow: inset 2px 0 #e44b54, 0 0 18px rgb(169 31 44 / 10%); }
+.fitness-choice input:focus-visible + .fitness-choice__body { outline: 2px solid #e44b54; outline-offset: 2px; }
+.fitness-choice__index { grid-row: 1 / span 2; color: #706a6b; font-family: var(--font-display, 'Barlow Condensed', sans-serif); font-size: 16px; }
+.fitness-choice__icon { grid-row: 1 / span 2; color: #b74750; }
+.fitness-choice__body strong { min-width: 0; color: #e5e0e0; font-size: 10px; font-weight: 700; }
+.fitness-choice__body small { grid-column: 2; min-width: 0; color: #817a7c; font-size: 8px; }
+.fitness-choice__check { width: 8px; height: 8px; grid-column: 3; grid-row: 1 / span 2; border: 1px solid #61595b; border-radius: 50%; }
+.fitness-choice[data-selected='true'] .fitness-choice__check { border: 2px solid #e44b54; background: #e44b54; box-shadow: inset 0 0 0 1px #171011; }
+
+.fitness-choice-group--goals { padding-bottom: 15px; border-bottom: 1px solid rgb(255 255 255 / 9%); }
+.fitness-choice-group--goals .fitness-choice-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.fitness-choice-group--goals .fitness-choice__body { min-height: 74px; grid-template-columns: auto 1fr auto; padding: 9px; }
+.fitness-choice-group--goals .fitness-choice__index { font-size: 13px; }
+.fitness-choice-group--goals .fitness-choice__icon { grid-column: 2; grid-row: 1; justify-self: end; }
+.fitness-choice-group--goals .fitness-choice__body strong { grid-column: 1 / -1; grid-row: 2; align-self: end; }
+.fitness-choice-group--goals .fitness-choice__body small { grid-column: 1 / -1; grid-row: 3; }
+.fitness-choice-group--goals .fitness-choice__check { width: 7px; height: 7px; grid-column: 3; grid-row: 1; }
+
+.fitness-section-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; padding: 15px 0 12px; border-bottom: 1px solid rgb(255 255 255 / 9%); }
+.fitness-section { min-width: 0; }
+.fitness-section > h3 { display: flex; align-items: center; gap: 7px; margin: 0 0 11px; color: #d3cdce; font-size: 8px; font-weight: 800; letter-spacing: 0.14em; }
+.fitness-section > h3 svg { color: #e44b54; }
+.fitness-section .fitness-choice-group + .fitness-choice-group { margin-top: 13px; }
+.fitness-choice-group--compact .fitness-choice-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.fitness-choice-group--compact .fitness-choice__body { min-height: 37px; grid-template-columns: auto 1fr auto; gap: 4px; padding: 6px 7px; }
+.fitness-choice-group--compact .fitness-choice__index { grid-row: auto; font-size: 11px; }
+.fitness-choice-group--compact .fitness-choice__body strong { grid-column: 2; grid-row: auto; font-size: 8px; }
+.fitness-choice-group--compact .fitness-choice__check { width: 7px; height: 7px; grid-column: 3; grid-row: auto; }
+
+.fitness-days { margin-top: 13px; }
+.fitness-day-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
+.fitness-day-grid button { min-height: 30px; border: 1px solid rgb(255 255 255 / 12%); background: #090909; color: #aaa3a5; font-size: 9px; cursor: pointer; transition: color 150ms ease, border-color 150ms ease, background 150ms ease; }
+.fitness-day-grid button:hover { border-color: rgb(228 75 84 / 60%); color: #fff; }
+.fitness-day-grid button[aria-pressed='true'] { border-color: #e44b54; background: #a82c37; color: #fff; box-shadow: 0 0 12px rgb(168 44 55 / 20%); }
+
+.fitness-choice-group--activity .fitness-choice-grid { gap: 6px; }
+.fitness-choice-group--activity .fitness-choice__body { min-height: 47px; grid-template-columns: 1fr auto; gap: 4px; padding: 7px 8px; }
+.fitness-choice-group--activity .fitness-choice__body strong { grid-column: 1; font-size: 9px; }
+.fitness-choice-group--activity .fitness-choice__body small { grid-column: 1; font-size: 7px; }
+.fitness-choice-group--activity .fitness-choice__index { grid-column: 2; grid-row: 1 / span 2; }
+.fitness-choice-group--activity .fitness-choice__check { display: none; }
+
+.fitness-steps { display: grid; gap: 7px; margin-top: 13px; }
+.fitness-steps > span { display: flex; align-items: center; gap: 6px; color: #bdb7b8; font-size: 7px; font-weight: 800; letter-spacing: 0.1em; }
+.fitness-steps > span svg { color: #b74750; }
+.fitness-steps > span small { margin-left: auto; color: #777174; font-size: 7px; }
+.fitness-steps input { width: 100%; min-height: 34px; padding: 0 9px; border: 1px solid rgb(255 255 255 / 12%); border-radius: 2px; background: #050505; color: #eee; font-size: 10px; transition: border-color 160ms ease, box-shadow 160ms ease; }
+.fitness-steps input::placeholder { color: #625c5e; }
+.fitness-steps input:focus { border-color: #e44b54; box-shadow: 0 0 0 2px rgb(228 75 84 / 10%); outline: none; }
+
+.fitness-nutrition { padding: 12px 0 14px; }
+.fitness-choice-group--diet .fitness-choice-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.fitness-choice-group--diet .fitness-choice__body { min-height: 37px; grid-template-columns: 1fr auto; gap: 5px; padding: 6px 7px; }
+.fitness-choice-group--diet .fitness-choice__index { grid-row: auto; font-size: 11px; }
+.fitness-choice-group--diet .fitness-choice__body strong { grid-column: 1; grid-row: auto; font-size: 8px; }
+.fitness-choice-group--diet .fitness-choice__check { width: 7px; height: 7px; grid-column: 2; grid-row: auto; }
+
+.fitness-appearance { padding: 14px 0 15px; border-top: 1px solid rgb(255 255 255 / 9%); }
+.fitness-appearance__heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.fitness-appearance__heading h3 { display: flex; align-items: center; gap: 7px; margin: 0; color: #d3cdce; font-size: 8px; font-weight: 800; letter-spacing: 0.14em; }
+.fitness-appearance__heading h3 svg { color: #e44b54; }
+.fitness-appearance__heading > span { color: #777174; font-size: 7px; font-weight: 700; letter-spacing: 0.08em; }
+.fitness-appearance__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 18px; }
+.fitness-appearance-group { min-width: 0; margin: 0; padding: 0; border: 0; }
+.fitness-appearance-group legend { display: flex; width: 100%; justify-content: space-between; gap: 6px; margin-bottom: 6px; padding: 0; color: #aaa3a5; font-size: 7px; font-weight: 800; letter-spacing: 0.1em; }
+.fitness-appearance-group legend small { color: #777174; font-size: 6px; letter-spacing: 0.07em; }
+.fitness-appearance-group__options { display: flex; flex-wrap: wrap; gap: 5px; }
+.fitness-appearance-choice { display: inline-flex; min-height: 27px; align-items: center; justify-content: center; gap: 5px; padding: 0 7px; border: 1px solid rgb(255 255 255 / 11%); border-radius: 2px; background: #080808; color: #aaa3a5; font-size: 7px; line-height: 1; cursor: pointer; transition: border-color 150ms ease, color 150ms ease, background 150ms ease; }
+.fitness-appearance-choice:hover { border-color: rgb(228 75 84 / 48%); color: #eee; }
+.fitness-appearance-choice[data-selected='true'] { border-color: #c9434d; background: rgb(104 24 32 / 32%); color: #fff; box-shadow: inset 0 -1px #c9434d; }
+.fitness-appearance-choice__swatch { width: 11px; height: 11px; flex: 0 0 auto; border: 1px solid rgb(255 255 255 / 26%); border-radius: 50%; background: var(--appearance-swatch); }
+.fitness-appearance-choice[data-selected='true'] .fitness-appearance-choice__swatch { outline: 1px solid #f0787e; outline-offset: 2px; }
+
+.fitness-feedback { margin: 0 0 12px; color: #ff858b; font-size: 10px; line-height: 1.5; }
+.fitness-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 13px; border-top: 1px solid rgb(255 255 255 / 9%); }
+.fitness-actions > span { display: inline-flex; align-items: center; gap: 7px; color: #777174; font-size: 7px; font-weight: 700; letter-spacing: 0.1em; }
+.fitness-actions > span i { width: 13px; height: 1px; background: #9f2933; }
+.fitness-actions button { display: inline-flex; min-height: 40px; align-items: center; justify-content: center; gap: 9px; padding: 0 13px; border: 1px solid #e44b54; border-radius: 2px; background: #b62f3a; color: #fff; font-size: 8px; font-weight: 800; letter-spacing: 0.1em; cursor: pointer; transition: background 160ms ease, transform 160ms ease; }
+.fitness-actions button:hover:not(:disabled) { transform: translateY(-1px); background: #d13a45; }
+.fitness-actions button:disabled { cursor: wait; opacity: 0.7; }
+
+@keyframes fitness-enter { from { opacity: 0; transform: translateY(11px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 1060px) {
+	.fitness-layout { grid-template-columns: minmax(0, 1fr); gap: 22px; max-width: 780px; margin-top: 27px; }
+	.fitness-intro { max-width: 620px; }
+	.fitness-intro h1 { margin: 13px 0 9px; font-size: 60px; }
+	.fitness-intro__copy { max-width: 520px; }
+	.fitness-module { display: none; }
+}
+
+@media (max-width: 620px) {
+	.fitness-onboarding { padding: 14px 14px 24px; }
+	.fitness-layout { gap: 19px; margin-top: 20px; }
+	.fitness-intro h1 { font-size: 50px; }
+	.fitness-intro__copy { font-size: 11px; }
+	.fitness-back { margin-top: 13px; }
+	.fitness-panel { padding: 19px 15px; }
+	.fitness-panel__heading h2 { font-size: 25px; }
+	.fitness-progress { grid-template-columns: auto auto; gap: 7px; }
+	.fitness-progress > div { display: none; }
+	.fitness-progress > span { font-size: 6px; }
+	.fitness-choice-group--goals .fitness-choice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.fitness-section-grid { grid-template-columns: minmax(0, 1fr); gap: 15px; }
+	.fitness-choice-group--diet .fitness-choice-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+	.fitness-appearance__grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 370px) {
+	.fitness-progress { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+	.fitness-panel { padding-inline: 12px; }
+	.fitness-choice-group--diet .fitness-choice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.fitness-actions > span { font-size: 6px; }
+	.fitness-actions button { gap: 5px; padding-inline: 8px; font-size: 7px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.fitness-intro,
+	.fitness-panel,
+	.fitness-choice__body,
+	.fitness-day-grid button,
+	.fitness-steps input,
+	.fitness-actions button,
+	.fitness-back { animation: none; transition: none; }
+}

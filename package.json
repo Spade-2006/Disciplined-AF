@@ -1,6 +1,32 @@
 {
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.5",
+    "express": "^5.2.1",
+    "mongoose": "^9.10.3",
     "tailwindcss": "^4.3.3"
+  },
+  "name": "disciplined-af",
+  "version": "1.0.0",
+  "description": "a personalised Fitness Tracking app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Spade-2006/Disciplined-AF.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Spade-2006/Disciplined-AF/issues"
+  },
+  "homepage": "https://github.com/Spade-2006/Disciplined-AF#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }

@@ -12,9 +12,11 @@ const MODEL_TARGET_HEIGHT = 5.15
 
 function clonePresentationMaterial(material) {
   const clone = material.clone()
-  if (clone.name === 'Skin' || clone.name === 'Skin.001') {
-    clone.roughness = Math.max(clone.roughness ?? 0, 0.52)
-  }
+  // Apply to all materials to ensure both male and female models are affected.
+  clone.roughness = Math.max(clone.roughness ?? 0, 0.88)
+  clone.metalness = 0.0
+  clone.envMapIntensity = 0.2
+  clone.color.multiplyScalar(0.70) // Decrease lightness slightly more
   return clone
 }
 

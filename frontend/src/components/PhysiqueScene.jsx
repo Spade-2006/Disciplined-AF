@@ -300,7 +300,7 @@ function PhysiqueScene({
         isViewTransitioning={isViewTransitioning}
         reducedMotion={reducedMotion}
       />
-      <SceneReflections resolution={96} frames={1} background={false} environmentIntensity={0.48}>
+      <SceneReflections resolution={96} frames={1} background={false} environmentIntensity={0.35}>
         <Lightformer form="rect" intensity={1.15} color="#f2f0ea" position={[-4, 3, 4]} rotation={[0, 0.55, 0]} scale={[3.5, 6, 1]} />
         <Lightformer form="rect" intensity={0.72} color={LAB_CYAN} position={[4, 1, 3]} rotation={[0, -0.55, 0]} scale={[2, 5, 1]} />
         <Lightformer form="rect" intensity={0.38} color={LAB_RED} position={[-4, 0, -2]} rotation={[0, Math.PI / 2, 0]} scale={[1.2, 4.5, 1]} />

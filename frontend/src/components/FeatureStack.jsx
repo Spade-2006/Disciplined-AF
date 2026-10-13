@@ -4,10 +4,10 @@ import { gsap } from '../utils/gsap.js'
 import { getMuscleCategory, MUSCLE_REGIONS } from './muscleRegions.js'
 
 const featureRoutes = {
-  anatomy: '/analysis',
-  progress: '/progress',
-  insights: '/insights',
-  physique: '/digital-physique',
+  anatomy: '/login',
+  progress: '/login',
+  insights: '/login',
+  physique: '/login',
 }
 
 const FEATURE_PODS = [
